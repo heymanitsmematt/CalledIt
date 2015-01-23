@@ -61,8 +61,5 @@ class MyError(Exception):
     def __str__(self):
 	return repr(self.value)
 
-if __name__ == "__main__":
-    s = Scraper()
-    s.parse()
-    ss = ScheduleScraper(s.teams)
-    
+if __name__ == "__name__":
+    pass

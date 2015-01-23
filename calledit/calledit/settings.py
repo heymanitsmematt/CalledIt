@@ -66,7 +66,7 @@ DATABASES = {
 	#'USER' : 'calledit',
 	'USER': 'root',
 	#'PASSWORD' : 'calledit',
-	'PASSWORD' : 'pydev101',
+	'PASSWORD' : 'richard',
 	'HOST' : 'localhost',
 	'PORT' : '3306',
 	}

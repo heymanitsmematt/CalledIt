@@ -1,3 +1,4 @@
+ 
 from django.shortcuts import render, render_to_response
 from app.models import User, Sport, Event, Party, Prediction
 from django.views.generic import TemplateView, View, ListView
@@ -20,33 +21,33 @@ def monthGetter(month, months):
 	    return i
 	else: i += 1
 
-class updateNcaaMensBasketball(View):
-    sport = Sport.objects.get_or_create(sport = 'Ncaa Mens Basketball')[0]
-    sport.save()
-    scraper = Scraper()
-    scraper.parse()
-    schedScraper = ScheduleScraper(scraper.teams)
-    results = schedScraper.results
-    for key in results:
-	thisTeam = key
-	team = Team.objects.get_or_create(teamName = thisTeam, sport = sport)[0]
-	team.save()
-	thisTeamSched = results[thisTeam]['schedule']
-	for event in thisTeamSched:
-	    eventDate = event[0]
-	    if eventDate[5:8] == 'Nov' or 'Dec':
-		eventYear = '2014'
-	    else:
-		eventYear = '2015'
-	    eventMonth = monthGetter(eventDate[5:8], months)
-	    eventDay = eventDate[9:]
-	    eventDate = '-'.join((eventYear,str(eventMonth), eventDay))
-	    event  = Event.objects.get_or_create(sportID = sport, eventName = event[1], eventDate = eventDate)[0]
-	    event.save()
-	    try:
-	        team.event_set.get(event = event)   
-	    except:
-		team.event.add(event.id)
-	    team.save()
-	
-if     
+class UpdateNCAAMensBasketball(View):
+    def update(self, request):
+	if request.method == 'POST':
+	    sport = Sport.objects.get_or_create(sport = 'Ncaa Mens Basketball')[0]
+	    sport.save()
+	    scraper = Scraper()
+	    scraper.parse()
+	    schedScraper = ScheduleScraper(scraper.teams)
+	    results = schedScraper.results
+	    for key in results:
+		thisTeam = key
+		team = Team.objects.get_or_create(teamName = thisTeam, sport = sport)[0]
+		team.save()
+		thisTeamSched = results[thisTeam]['schedule']
+		for event in thisTeamSched:
+		    eventDate = event[0]
+		    if eventDate[5:8] == 'Nov' or 'Dec':
+			eventYear = '2014'
+		    else:
+			eventYear = '2015'
+			eventMonth = monthGetter(eventDate[5:8], months)
+			eventDay = eventDate[9:]
+			eventDate = '-'.join((eventYear,str(eventMonth), eventDay))
+			event  = Event.objects.get_or_create(sportID = sport, eventName = event[1], eventDate = eventDate)[0]
+			event.save()
+			try:
+			    team.event_set.get(event = event)   
+			except:
+			    team.event.add(event.id)
+			    team.save()

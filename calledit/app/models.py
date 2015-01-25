@@ -1,8 +1,9 @@
 from django.db import models
 from django.conf import settings
+from django.contrib.auth.models import User
 
-class User(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL)
+class UserProfile(models.Model):
+    user = models.OneToOneField(User)
     rating = models.BigIntegerField(null = True)
     #friends = models.ManyToManyField(User)
 

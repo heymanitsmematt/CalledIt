@@ -4,6 +4,6 @@ from views import UpdateNCAAMensBasketball
 from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = patterns('api/',
-    (r'^ncaabball/$', UpdateNCAAMensBasketball.as_view())
+    (r'^ncaabball/$', csrf_exempt(UpdateNCAAMensBasketball.as_view()))
 )
 

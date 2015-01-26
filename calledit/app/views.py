@@ -4,7 +4,7 @@ import simplejson
 from django.core import serializers
 from django.template import RequestContext, loader
 from django.views.generic import ListView, View, TemplateView, FormView
-from models import User, Sport, Team, Event, Party, Prediction
+from models import User, Sport, Team, Event, Party, Prediction, Tournament
 from app.forms import UserForm, UserProfileForm
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -22,13 +22,13 @@ class Main(LoggedInMixin, TemplateView):
 	predictions = Prediction.objects.all()
 	response = HttpResponse('')
 	response['predictions'] = predictions
-    
+        return response 
     def get_context_data(self, **kwargs):
 	context = super(Main, self).get_context_data(**kwargs)
-	context.update({'request': self.request, 'user': self.request.user})
+	context.update({'request': self.request, 'user': self.request.user, 'sport' : Sport.objects.all(), 'tournaments' : Tournament.objects.all(), 'pendingEvents' : Event.objects.exclude(eventDate__isnull=True)})
 	return context
 	
-	return response
+	
 
 def register(request):
     context = RequestContext(request)

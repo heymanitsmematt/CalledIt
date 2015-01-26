@@ -1,4 +1,4 @@
- 
+from django.utils.decorators import method_decorator
 from django.shortcuts import render, render_to_response
 from app.models import User, Sport, Event, Party, Prediction
 from django.views.generic import TemplateView, View, ListView
@@ -21,8 +21,13 @@ def monthGetter(month, months):
 	    return i
 	else: i += 1
 
-class UpdateNCAAMensBasketball(View):
-    def update(self, request):
+class CSRFExemptMixin(object):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+	return super(CSRFExemptMixin, self).dispatch(*args, **kwargs)
+
+class UpdateNCAAMensBasketball(CSRFExemptMixin, View):
+    def post(self, request):
 	if request.method == 'POST':
 	    sport = Sport.objects.get_or_create(sport = 'Ncaa Mens Basketball')[0]
 	    sport.save()
@@ -41,13 +46,13 @@ class UpdateNCAAMensBasketball(View):
 			eventYear = '2014'
 		    else:
 			eventYear = '2015'
-			eventMonth = monthGetter(eventDate[5:8], months)
-			eventDay = eventDate[9:]
-			eventDate = '-'.join((eventYear,str(eventMonth), eventDay))
-			event  = Event.objects.get_or_create(sportID = sport, eventName = event[1], eventDate = eventDate)[0]
-			event.save()
-			try:
-			    team.event_set.get(event = event)   
-			except:
-			    team.event.add(event.id)
-			    team.save()
+		    eventMonth = monthGetter(eventDate[5:8], months)
+		    eventDay = eventDate[9:]
+		    eventDate = '-'.join((eventYear,str(eventMonth), eventDay))
+		    event  = Event.objects.get_or_create(sportID = sport, eventName = event[1], eventDate = eventDate)[0]
+		    event.save()
+		    
+		    team.event.add(event)
+		    team.save()
+
+	return HttpResponse('updated')

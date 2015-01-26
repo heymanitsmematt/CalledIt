@@ -31,6 +31,9 @@ class Party(models.Model):
     def __unicode__(self):
 	return self.partyName
 
+class Tournament(models.Model):
+    tournamentName = models.CharField(max_length=100)
+    tournamentSport = models.ForeignKey(Sport, null=True)
 
 class Prediction(models.Model):
     eventID = models.ForeignKey(Event)

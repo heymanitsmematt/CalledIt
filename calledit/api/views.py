@@ -26,6 +26,21 @@ class CSRFExemptMixin(object):
     def dispatch(self, *args, **kwargs):
 	return super(CSRFExemptMixin, self).dispatch(*args, **kwargs)
 
+class GetSportTeams(View):
+    def get_context_data(self, **kwargs):
+	context = super(GetSportTeams, self).get_context_data(**kwargs)
+	qs = super(GetSportTeams, self).get_queryset()
+	return context
+
+    def get(self, request, *args, **kwargs):
+	if self.request.method == 'GET':
+	    self.sport = self.request.GET.get('sport')
+	    print "sport = ", self.sport	 
+	    self.sport = Sport.objects.get(sport=str(self.sport))
+	    self.teams = Team.objects.all().filter(sport=self.sport)
+	    self.teams = serializers.serialize('json', self.teams)
+	    return HttpResponse(self.teams)	    
+
 class UpdateNCAAMensBasketball(CSRFExemptMixin, View):
     def post(self, request):
 	if request.method == 'POST':

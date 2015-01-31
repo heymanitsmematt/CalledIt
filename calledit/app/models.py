@@ -49,6 +49,9 @@ class Team(models.Model):
     sport = models.ForeignKey(Sport)
     predictions = models.ForeignKey(Prediction, null=True)
 
+class Division(models.Model):
+    team = models.ForeignKey(Team, null=True)
+    division = models.CharField(max_length = 100)
 
 
 

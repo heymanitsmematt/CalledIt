@@ -21,11 +21,12 @@ class Main(LoggedInMixin, TemplateView):
     def head(self, *args, **kwargs):
 	predictions = Prediction.objects.all()
 	response = HttpResponse('')
-	response['predictions'] = predictions
+	response['predictions'] = prediction
         return response 
+    
     def get_context_data(self, **kwargs):
 	context = super(Main, self).get_context_data(**kwargs)
-	context.update({'request': self.request, 'user': self.request.user, 'sport' : Sport.objects.all(), 'tournaments' : Tournament.objects.all(), 'pendingEvents' : Event.objects.exclude(eventDate__isnull=True)})
+	context.update({'request': self.request, 'user': self.request.user,'teams' : Team.objects.all().order_by('teamName'), 'sports' : Sport.objects.all(), 'tournaments' : Tournament.objects.all() })
 	return context
 	
 	

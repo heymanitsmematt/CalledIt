@@ -1,0 +1,48 @@
+{% load staticfiles %}
+<html>
+    <head>	
+        <script src="{% static "js/jquery.js" %}"></script>
+	<title>CalledIt</title>
+	<script src="{% static "js/jquery-ui.js" %}"></script>
+        <script src="{% static "js/fb.js" %}"></script>
+        <script src="{% static "js/base.js" %}"></script>
+	<link rel="stylesheet" href="{% static "css/jquery-ui.css"%}" />
+    </head>
+    <body>
+	    <h2>CalledIt</h2>
+	<p>
+	<div class="ui-button"  >
+	{% if user and user.is_authenticated %}
+	   <a href="app/userprofile/{{user.id}}">Profile</a>
+	   <a href="app/logout.html">Logout</a>
+	   <ul id="callit_header">Call It
+       		<li class="headerOption">Sport</li>
+		    {% if sport %}
+		    <ul>
+		        {% for sport in sports %}
+			<li><a href="makePrediction/sport/{{sport.sport.id}}"}>{{ sport.sport }}</a></li>
+		        {% endfor %}
+		    {% endif %}
+		    </ul>
+		<li class="headerOption"><a href="/callit/">I CallIt</a></li>
+		<li class="headerOption">Tournament</li>
+		{% if trounaments %}
+		    {% for tournamet in tournaments %}
+			<ul>
+			    <li>Tournament sport</li>
+			    <li>Non-Sport Trournaments</li>	
+			</ul>
+		    {% endfor %}
+		{% endif %}
+	{% else %}
+	    <a href="app/register.html">Register</a>
+	    <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}">Login with Facebook</a>
+	</ul>
+	{% endif %}
+	</div>
+	</p>
+{% block content %}{% endblock %}
+    <div class="fb-like" data-share="true" data-width="450" data-show-faces="true">
+    </div>
+    </body>
+</html>

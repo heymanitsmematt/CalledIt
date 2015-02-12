@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     rating = models.BigIntegerField(null = True)
-    #friends = models.ManyToManyField(User)
+    friends = models.ForeignKey('self', null=True)
 
 class Sport(models.Model):
     sport = models.CharField(max_length = 50)
@@ -16,9 +16,10 @@ class Sport(models.Model):
 class Event(models.Model):
     sportID = models.ForeignKey(Sport)
     eventName = models.CharField(max_length = 200)
+    altTeamName = models.CharField(max_length = 100)
     eventDescription = models.CharField(max_length = 500, null=True)
     eventDate = models.DateField(null=True)
-    odds = models.BigIntegerField(null=True)   
+    odds = models.CharField(max_length=500, null=True)   
  
     def __unicode__(self):
 	return self.eventName
@@ -45,12 +46,13 @@ class Prediction(models.Model):
     
 class Team(models.Model):
     teamName = models.CharField(max_length=100)
+    altTeamName = models.CharField(max_length=100)
     event = models.ManyToManyField(Event, null=True)
     sport = models.ForeignKey(Sport)
     predictions = models.ForeignKey(Prediction, null=True)
 
 class Division(models.Model):
-    team = models.ForeignKey(Team, null=True)
+    teamID = models.ManyToManyField(Team, null=True, default='NULL')
     division = models.CharField(max_length = 100)
 
 

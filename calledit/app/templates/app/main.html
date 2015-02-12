@@ -1,0 +1,16 @@
+{% extends "app/base.html" %}
+{% block content %}
+<p><strong>you </strong>call it, <strong>we </strong>call you on it.</p>
+<h3>Pending Events</h3>
+    <table id="mainTable" border="1px">
+    {% for sport in sports %}
+	<tr>
+	    <td id="sport{{sport.id }}"class="sportRow">
+		<strong>{{sport.sport}}</strong>
+	    </td>
+	</tr>
+    {% endfor %}
+    </table>
+<script src="static/js/main.js"></script>
+<link rel="stylesheet" href="/static/css/main.css" />
+{% endblock %}

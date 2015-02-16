@@ -2,6 +2,7 @@ import requests
 import re
 from app.models import *
 import time
+import datetime
 
 class eventOutline:
     def __init__(self, event):
@@ -57,17 +58,29 @@ class Matcher:
 
 	for game in self.odds.values():
 	    for home in game[0]:
-		if self.team.teamName in home:
+		if self.team.teamName == home:
 		    for event in self.team.event.all():
 			if event.eventName in game[1] or event.altTeamName in game[1]:
 			    self.event.append([self.team, self.team.teamName, event, game])
+		elif self.team.altTeamName == home:
+		    for event in self.team.event.all():
+			if event.eventName in game[1] or event.altTeamName in game[1]:
+			    self.event.append([self.team, self.team.teamName, event, game])
+		else:
+		    try:
+			if self.team.teamName[:6] == home[:6]:
+		    	    for event in self.team.event.all():
+				if event.eventName in game[1] or event.altTeamName in game[1]:
+			    	    self.event.append([self.team, self.team.teamName, event, game])
+		    except: pass
 
 
     def match(self):
         if len(self.event)>0:
             for e in self.event:
-		if e[2].eventDate.strftime("%m/%d/%Y") <= time.strftime("%m/%d/%Y"):
+		diff = e[2].eventDate - datetime.date.today()
+		if diff.days < 2:
 		    return e
-
+		
 
 

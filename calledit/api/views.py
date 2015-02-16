@@ -48,20 +48,20 @@ class updateOdds(CSRFExemptMixin, View):
 	    event = ncaas[3].event.all()[3]
 	    ol = eventOutline(event)
 	    odds1 = parseOdds(ol.requestRaw)
-	    odds2 = parseOdds(ol.request2Raw)
+	    #odds2 = parseOdds(ol.request2Raw)
 	    for team in ncaas:
 		m1 = Matcher(team, odds1.spit())
-		m2 = Matcher(team, odds2.spit())
+		#m2 = Matcher(team, odds2.spit())
 		try:
 		    thisEvent = m1.match()[2]
-		    thisEvent.odds = m1.match()[3]
+		    thisEvent.odds = str(m1.match()[3][0][0]) +" "+ str(m1.match()[3][0][1]) +","+ str(m1.match()[3][1][0]) +" "+ str(m1.match()[3][1][1])
 		    thisEvent.save()	
 		    print 'saved m1 ' + m1.match()
 		except:
 		    try:
 			thisEvent = m2.match()[2]
-			thisEvent.odds = m2.match()[3]
-			thisEvent.save()
+		        thisEvent.odds = str(m2.match()[3][0][0]) +" "+ str(m2.match()[3][0][1]) +","+ str(m2.match()[3][1][0]) +" "+ str(m1.match()[3][1][1])
+		        thisEvent.save()
 			print 'saved m2 ' + m2.match()
 		    except: 
 			#print 'noooooajeoiaew'

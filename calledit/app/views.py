@@ -29,7 +29,17 @@ class Main(LoggedInMixin, TemplateView):
 	context.update({'request': self.request, 'user': self.request.user,'teams' : Team.objects.all().order_by('teamName'), 'sports' : Sport.objects.all(), 'tournaments' : Tournament.objects.all() })
 	return context
 	
-	
+class MakeCarl(LoggedInMixin, View):
+    def get_context_data(self, **kwargs):
+        context = super(MakeCarl, self).get_context_data(**kwargs)
+        qs = super(MakeCarl, self.get_queryset())
+	return context
+
+    def post(self, request):
+	if request.method == 'POST':
+	    self.req = request.POST
+	    print self.req
+	return HttpResponse('success?')		
 
 def register(request):
     context = RequestContext(request)
@@ -63,4 +73,6 @@ def register(request):
 	profile_form = UserProfileForm()
 
     return render_to_response('app/register.html', {'user_form' : user_form, 'profile_form' : profile_form, 'registered' : registered}, context)
+
+
 
